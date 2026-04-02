@@ -1,0 +1,152 @@
+---
+title: "Comparing NCBI, Silva, RAD using MetaScope"
+output: html_document
+author: "Remington Manning-Neal"
+---
+
+## Required packages
+
+
+## Install MetaScope
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install("MetaScope")
+
+suppressPackageStartupMessages({
+  library(MetaScope)
+  library(magrittr)
+})
+```
+
+## Load data
+
+```{r}
+source("load_data.R")
+ncbi_db_path <- bt_indices_metascope_ncbi() # bowtie indices
+silva_db_path <- bt_indices_metascope_silva() # bowtie indices
+radlib16s_db_path <- bt_indices_radlib_16S() # bowtie indicies
+radlibvr_db_path <- bt_indices_radlib_vr()
+
+dada2_testData <- load_dada2_test_data() 
+v3v4_testData <- load_real_world_test_data() 
+
+data_dir <- file.path(getwd(), "data")
+ncbi_data_dir <- file.path(data_dir, "ncbi")
+silva_data_dir <- file.path(data_dir, "silva")
+radlib_data_dir <- file.path(data_dir, "rad")
+```
+
+## Create results directories
+
+```{r}
+analysis_dir <- file.path(getwd(), "analysis")
+dir.create(analysis_dir)
+results_dir <- file.path(getwd(), "results")
+dir.create(results_dir)
+```
+
+## MetaScope NCBI
+
+### Create Bowtie indicies
+
+```{r}
+ncbi_bowtie_dir <- file.path(ncbi_data_dir, "target")
+mk_bowtie_index(
+  ref_dir = ncbi_data_dir,
+  lib_dir = ncbi_bowtie_dir,
+  lib_name = "target",
+  overwrite = TRUE
+)
+```
+
+### Create BAM files
+
+```{r}
+ncbi_output_temp <- tempfile(pattern = "ncbi")
+dir.create(file.path(ncbi_output_temp, output_temp))
+
+readPath <-
+  system.file("extdata", testData, package = "MetaScope")
+
+map <-
+  align_target_bowtie(
+    read1 = readPath,
+    lib_dir = ncbi_bowtie_dir,
+    libs = "target",
+    align_dir = ncbi_output_temp,
+    align_file = "bowtie_target",
+    overwrite = TRUE
+  )
+```
+### MetaID
+
+```{r}
+#TODO: tmp_accessions may need to be a sqlite db. May not be needed though???
+output <- metascope_id(
+  map,
+  input_type = "bam",
+  # change input_type to "csv.gz" when not creating a BAM
+  aligner = "bowtie2",
+  num_species_plot = 0,
+  accession_path = tmp_accession
+)
+
+knitr::kable(output,
+             format = "html",
+             digits = 2,
+             caption = "Table of MetaScope ID results")
+```
+
+
+## MetaScope Silva
+
+>SILVA bowtie indices were made previously by the MetaScope team
+
+```{r}
+# Create a temp directory to store output bam file
+output_temp <- tempfile()
+dir.create(output_temp)
+
+# Get path to example reads
+readPath <-
+  system.file("extdata", "reads.fastq", package = "MetaScope")
+
+# Align reads to the target genomes
+target_map <-
+  align_target_bowtie(
+    read1 = readPath,
+    lib_dir = index_temp,
+    libs = "target",
+    align_dir = output_temp,
+    align_file = "bowtie_target",
+    overwrite = TRUE
+  )
+```
+
+## MetaScope RAD
+
+```{r}
+
+```
+
+## BLAST baseline
+
+```{r}
+
+```
+
+
+## Analysis
+
+```{r}
+
+```
+
+## Figure
+
+```{r}
+
+```
+
