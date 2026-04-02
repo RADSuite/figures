@@ -26,8 +26,8 @@ suppressPackageStartupMessages({
 source("load_data.R")
 ncbi_db_path <- bt_indices_metascope_ncbi() # bowtie indices
 silva_db_path <- bt_indices_metascope_silva() # bowtie indices
-radlib16s_db_path <- bt_indices_radlib_16S() # bowtie indicies
-radlibvr_db_path <- bt_indices_radlib_vr()
+radlib16s_db_path <- bt_indices_radlib_16S() # bowtie indices
+radlibvr_db_path <- bt_indices_radlib_vr() # bowtie indices (many sequences are empty so warning suppression is needed)
 
 dada2_testData <- load_dada2_test_data() 
 v3v4_testData <- load_real_world_test_data() 
@@ -49,37 +49,27 @@ dir.create(results_dir)
 
 ## MetaScope NCBI
 
-### Create Bowtie indicies
-
-```{r}
-ncbi_bowtie_dir <- file.path(ncbi_data_dir, "target")
-mk_bowtie_index(
-  ref_dir = ncbi_data_dir,
-  lib_dir = ncbi_bowtie_dir,
-  lib_name = "target",
-  overwrite = TRUE
-)
-```
-
 ### Create BAM files
 
 ```{r}
-ncbi_output_temp <- tempfile(pattern = "ncbi")
-dir.create(file.path(ncbi_output_temp, output_temp))
+ncbi_output_temp <- tempfile(pattern = "ncbi", tmpdir = file.path(getwd(), "analysis"))
+dir.create(file.path(ncbi_output_temp))
 
 readPath <-
-  system.file("extdata", testData, package = "MetaScope")
+  system.file("extdata", dada2_testData, package = "MetaScope")
 
+dada2_1st_fastq_file <- list.files(path = dada2_testData, pattern = ".fastq")[1]
 map <-
   align_target_bowtie(
-    read1 = readPath,
-    lib_dir = ncbi_bowtie_dir,
-    libs = "target",
+    read1 = file.path(dada2_testData, dada2_1st_fastq_file),
+    lib_dir = ncbi_db_path,
+    libs = "ncbi",
     align_dir = ncbi_output_temp,
     align_file = "bowtie_target",
     overwrite = TRUE
   )
 ```
+
 ### MetaID
 
 ```{r}
