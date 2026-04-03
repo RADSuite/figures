@@ -34,6 +34,10 @@ bt_indices_radlib_vr <- function(){
   radvr_bowtie_dir <- file.path(rad_data_dir, "vr-indices")
   radvr_data_dir <- file.path(rad_data_dir, "vr")
   dir.create(radvr_bowtie_dir)
+  
+  # vr_tmp <- tempdir(pattern = "vr", tmpdir = file.path(radvr_data_dir,"tmp"))
+  
+  
   mk_bowtie_index(
     ref_dir = radvr_data_dir,
     lib_dir = radvr_bowtie_dir,
