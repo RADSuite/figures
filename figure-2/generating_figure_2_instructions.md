@@ -7,11 +7,12 @@ command line to install them:
 
 ### Biostrings
     BiocManager::install("Biostrings")
-    - If BiocManager is not installed, run: install.packages("BiocManager")
+    If BiocManager is not installed, run: 
+    install.packages("BiocManager")
 ### tidyverse
     install.packages("tidyverse")
-### here
+### here 
     install.packages("here")
 
 After all dependencies have been installed, figure 2 can be generated simply by running
-"create_figure_2.r".
+the rscript "create_figure_2.r".
