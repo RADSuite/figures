@@ -4,9 +4,9 @@ library(ggtext)
 
 # load in data
 get_fig_counts <- function() {
-  ncbi_counts  <- read_csv("data/ncbi_counts_with_names.csv")
-  rad_counts   <- read_csv("data/rad_counts_with_names.csv")
-  silva_counts <- read_csv("data/silva_counts_with_names.csv")
+  ncbi_counts  <- read_csv("figures/figure-3/data/ncbi_counts_with_names.csv")
+  rad_counts   <- read_csv("figures/figure-3/data/rad_counts_with_names.csv")
+  silva_counts <- read_csv("figures/figure-3/data/silva_counts_with_names.csv")
 
 
   ncbi_species  <- ncbi_counts  %>% filter(Freq > 0) %>% pull(organism_short) %>% unique()

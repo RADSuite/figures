@@ -24,3 +24,18 @@ command line to install them:
 
 After all dependencies have been installed, figure 2 can be generated simply by running
 the rscript "create_figure_2.r".
+
+# Instructions on generating figure 3
+First, clone this repository to your device.
+## Dependencies
+Figure 3 has three package dependencies: data.table, tidyverse, and ggtext. If any
+of these dependencies are not installed, run the corresponding line in the R
+command line to install them:
+### data.table
+    install.packages("data.table")
+### tidyverse
+    install.packages("tidyverse")
+### ggtext
+    install.packages("ggtext")
+After all dependencies have been installed, figure 3 can be generated simply by running
+the rscript "create_figure_3.r".
