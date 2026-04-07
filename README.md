@@ -1,5 +1,9 @@
 This repository contains the figures generated for the manuscript publication of RADSuite.
 
+# Instructions on generating figure 1
+Because figure 1 contains no numerical data, it was created manually using the draw.io
+free software. A copy of the figure has been included here for completeness.
+
 # Instructions on generating figure 2
 
 ## Dependencies
