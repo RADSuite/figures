@@ -6,6 +6,8 @@ free software. A copy of the figure has been included here for completeness.
 
 # Instructions on generating figure 2
 
+First, clone this repository to your device.
+
 ## Dependencies
 Figure 2 has three package dependencies: Biostrings, tidyverse, and here. If any 
 of these dependencies are not installed, run the corresponding line in the R 
