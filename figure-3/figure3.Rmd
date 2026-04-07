@@ -103,7 +103,6 @@ knitr::kable(
   col.names = c("Genome Assigned", "Read Count"))
 ```
 
-
 ## MetaScope Silva
 
 >SILVA bowtie indices were made previously by the MetaScope team
@@ -218,7 +217,6 @@ ncbi_v3v4_map <-
     overwrite = TRUE
   )
 ```
-
 
 ## MetaScope Silva
 
