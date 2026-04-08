@@ -14,13 +14,19 @@ of these dependencies are not installed, run the corresponding line in the R
 command line to install them:
 
 ### Biostrings
+```r
     BiocManager::install("Biostrings")
     If BiocManager is not installed, run: 
     install.packages("BiocManager")
+```
 ### tidyverse
+```r
     install.packages("tidyverse")
+```
 ### here 
+```r
     install.packages("here")
+```
 
 ## Set working directory
 After all dependencies have been installed, set the working directory to the figures directory:
