@@ -21,9 +21,8 @@ command line to install them:
 
 ### Biostrings
 ```r
-    BiocManager::install("Biostrings")
-    If BiocManager is not installed, run: 
     install.packages("BiocManager")
+    BiocManager::install("Biostrings")
 ```
 ### tidyverse
 ```r
