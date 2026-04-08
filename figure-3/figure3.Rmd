@@ -22,6 +22,9 @@ suppressPackageStartupMessages({
   library(magrittr)
   # library(ShortRead)
 })
+library(data.table)
+library(tidyverse)
+library(ggtext)
 ```
 
 ## Load data
@@ -94,32 +97,11 @@ accession_all <- aln[[1]]$rname
 #   taxonomizr::accessionToTaxa(tmp_accession) |>
 #   taxonomizr::getTaxonomy(sqlFile = tmp_accession, desiredTaxa = "strain")
 # read_count_table <- sort(table(genome_name_all), decreasing = TRUE)
-read_count_table <- sort(table(accession_all), decreasing = TRUE)
+ncbi_dada2_read_count_table <- sort(table(accession_all), decreasing = TRUE)
 knitr::kable(
-  read_count_table[1:10],
+  ncbi_dada2_read_count_table[1:10],
   col.names = c("Genome Assigned", "Read Count"))
 ```
-
-
-### MetaID (Unable to perform due to issues generating the proper taxonomizr database)
-
-```{r}
-#TODO: tmp_accessions may need to be a sqlite db. May not be needed though???
-# output <- metascope_id(
-#   map,
-#   input_type = "bam",
-#   # change input_type to "csv.gz" when not creating a BAM
-#   aligner = "bowtie2",
-#   num_species_plot = 0,
-#   accession_path = tmp_accession
-# )
-# 
-# knitr::kable(output,
-#              format = "html",
-#              digits = 2,
-#              caption = "Table of MetaScope ID results")
-```
-
 
 ## MetaScope Silva
 
@@ -236,26 +218,6 @@ ncbi_v3v4_map <-
   )
 ```
 
-### MetaID
-
-```{r}
-#TODO: tmp_accessions may need to be a sqlite db. May not be needed though???
-# output <- metascope_id(
-#   map,
-#   input_type = "bam",
-#   # change input_type to "csv.gz" when not creating a BAM
-#   aligner = "bowtie2",
-#   num_species_plot = 0,
-#   accession_path = tmp_accession
-# )
-# 
-# knitr::kable(output,
-#              format = "html",
-#              digits = 2,
-#              caption = "Table of MetaScope ID results")
-```
-
-
 ## MetaScope Silva
 
 >SILVA bowtie indices were made previously by the MetaScope team
@@ -307,6 +269,87 @@ rad16_v3v4_map <-
 ## Figure
 
 ```{r}
+get_fig_counts <- function() {
+  # ncbi_counts  <- read_csv("figures/figure-3/data/ncbi_counts_with_names.csv")
+  # rad_counts   <- read_csv("figures/figure-3/data/rad_counts_with_names.csv")
+  # silva_counts <- read_csv("figures/figure-3/data/silva_counts_with_names.csv")
+  ncbi_counts <- ncbi_accessions_to_organism(ncbi_dada2_read_count_table)
+  rad_counts <- rad_accessions_to_organism(rad_dada2_read_count_table)
+  silva_counts <- silva_accessions_to_organism(silva_dada2_read_count_table)
 
+  ncbi_species  <- ncbi_counts  %>% filter(Freq > 0) %>% pull(organism_short) %>% unique()
+  rad_species   <- rad_counts   %>% filter(Freq > 0) %>% pull(organism_short) %>% unique()
+  silva_species <- silva_counts %>% filter(Freq > 0) %>% pull(organism_short) %>% unique()
+
+  common_species <- Reduce(intersect, list(ncbi_species, rad_species, silva_species))
+  common_species <- common_species[common_species != "Bacteroides caecimuris"]
+
+  combined <- bind_rows(
+    ncbi_counts  %>% mutate(database = "NCBI - MetaScope"),
+    rad_counts   %>% mutate(database = "RADlib - MetaScope"),
+    silva_counts %>% mutate(database = "SILVA - MetaScope")
+  ) %>%
+    filter(organism_short %in% common_species, Freq > 0) %>%
+    group_by(organism_short, database) %>%
+    summarise(Freq = sum(Freq), .groups = "drop")
+
+  return(combined)
+}
+
+# temporary fake blast data
+add_blast_fake_data <- function(combined) {
+  blast_fake_data <- combined %>%
+    distinct(organism_short) %>%
+    mutate(database = "NCBI - BLAST", Freq = 0.1)
+
+  return(bind_rows(combined, blast_fake_data))
+}
+
+# add in italics for Genus species names
+add_labels <- function(combined) {
+  combined %>%
+    mutate(label = paste0("<i>", word(organism_short, 1), " ", word(organism_short, 2), "</i>"))
+}
+
+# main figure generation code
+generate_figure <- function() {
+  combined <- get_fig_counts() %>%
+    add_blast_fake_data() %>%
+    add_labels()
+
+  ggplot(combined, aes(x = Freq, y = label, fill = database)) +
+    geom_col(position = position_dodge(0.9), alpha = 0.9,
+             color = "black", linewidth = 0.3) +
+    scale_fill_manual(
+      values = c(
+        "NCBI - BLAST"       = "#E8871A",
+        "NCBI - MetaScope"   = "#888780",
+        "SILVA - MetaScope"  = "#378ADD",
+        "RADlib - MetaScope" = "#1D9E75"
+      ),
+      breaks = c(
+        "NCBI - BLAST",
+        "NCBI - MetaScope",
+        "SILVA - MetaScope",
+        "RADlib - MetaScope"
+      )
+    ) +
+    labs(
+      x    = "Read count",
+      y    = NULL,
+      fill = "Database - Algorithm"
+    ) +
+    theme_bw(base_size = 15) +
+    theme(
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor   = element_blank(),
+      panel.grid.major.x = element_line(color = "grey90"),
+      axis.text.y        = element_markdown(size = 15),
+      legend.position    = "right",
+      legend.key.size    = unit(0.8, "cm")
+    )
+}
+
+generate_figure()
 ```
 

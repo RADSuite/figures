@@ -37,12 +37,13 @@ add_blast_fake_data <- function(combined) {
   return(bind_rows(combined, blast_fake_data))
 }
 
-# italics
+# add in italics for Genus species names
 add_labels <- function(combined) {
   combined %>%
     mutate(label = paste0("<i>", word(organism_short, 1), " ", word(organism_short, 2), "</i>"))
 }
 
+# main figure generation code
 generate_figure <- function() {
   combined <- get_fig_counts() %>%
     add_blast_fake_data() %>%

@@ -5,8 +5,14 @@ Because figure 1 contains no numerical data, it was created manually using the d
 free software. A copy of the figure has been included here for completeness.
 
 # Instructions on generating figure 2
+## Large data files
+To clone this repository to your device, you'll need access to Github's Large File Storage. If you don't already have this downloaded, first download it at https://git-lfs.com/
 
-First, clone this repository to your device.
+Next, run this command in a terminal such as git bash:
+```
+git lfs install
+```
+You should now be ready to clone the repository.
 
 ## Dependencies
 Figure 2 has three package dependencies: Biostrings, tidyverse, and here. If any 
@@ -14,16 +20,27 @@ of these dependencies are not installed, run the corresponding line in the R
 command line to install them:
 
 ### Biostrings
+```r
     BiocManager::install("Biostrings")
     If BiocManager is not installed, run: 
     install.packages("BiocManager")
+```
 ### tidyverse
+```r
     install.packages("tidyverse")
+```
 ### here 
+```r
     install.packages("here")
+```
 
-After all dependencies have been installed, figure 2 can be generated simply by running
-the rscript "create_figure_2.r".
+## Set working directory
+After all dependencies have been installed, set the working directory to the figures directory:
+```r
+    setwd("your/path/to/figures")
+```
+
+Now figure 2 can be generated simply by running the rscript "create_figure_2.r".
 
 # Instructions on generating figure 3
 First, clone this repository to your device.

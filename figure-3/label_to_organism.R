@@ -14,6 +14,11 @@ ncbi_accessions_to_organism <- function(acc_counts_table){
   return(name_counts_table)
 }
 
+rad_accessions_to_organism <- function(acc_counts_table){
+  stop("function not created")
+  return()
+}
+
 silva_accessions_to_organism <- function(acc_counts_table){
   # Get 7
   name_counts_table <- character(length(acc_counts_table))
