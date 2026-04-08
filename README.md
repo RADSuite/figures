@@ -48,10 +48,20 @@ Figure 3 has three package dependencies: data.table, tidyverse, and ggtext. If a
 of these dependencies are not installed, run the corresponding line in the R
 command line to install them:
 ### data.table
+```r
     install.packages("data.table")
+```
 ### tidyverse
+```r
     install.packages("tidyverse")
+```
 ### ggtext
+```r
     install.packages("ggtext")
+```
+### here
+```r
+    install.packages("here")
+```
 After all dependencies have been installed, figure 3 can be generated simply by running
 the rscript "create_figure_3.r".
