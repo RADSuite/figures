@@ -1,4 +1,12 @@
 # Instructions on generating figure 2
+## Large data files
+To clone this repository to your device, you'll need access to Github's Large File Storage. If you don't already have this downloaded, first download it at https://git-lfs.com/
+
+Next, run this command in a terminal such as git bash:
+```
+git lfs install
+```
+You should now be ready to clone the repository.
 
 ## Dependencies
 Figure 2 has three package dependencies: Biostrings, tidyverse, and here. If any 
@@ -6,9 +14,8 @@ of these dependencies are not installed, run the corresponding line in the R
 command line to install them:
 
 ### Biostrings
-    BiocManager::install("Biostrings")
-    If BiocManager is not installed, run: 
     install.packages("BiocManager")
+    BiocManager::install("Biostrings")
 ### tidyverse
     install.packages("tidyverse")
 ### here 
