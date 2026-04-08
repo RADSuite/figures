@@ -66,5 +66,6 @@ Check your working directory is the figures/ directory you cloned from Github.
 ```r
 getwd()
 ```
+If it's not the figures/ directory, use the setwd() function to change your working directory to be figures/.
 
 Restart RStudio: Sometimes, installing the dependencies requires a restart to allow the here package to correctly locate the files.
