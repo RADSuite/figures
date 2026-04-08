@@ -5,8 +5,14 @@ Because figure 1 contains no numerical data, it was created manually using the d
 free software. A copy of the figure has been included here for completeness.
 
 # Instructions on generating figure 2
+## Large data files
+To clone this repository to your device, you'll need access to Github's Large File Storage. If you don't already have this downloaded, first download it at https://git-lfs.com/
 
-First, clone this repository to your device.
+Next, run this command in a terminal such as git bash:
+```
+git lfs install
+```
+You should now be ready to clone the repository.
 
 ## Dependencies
 Figure 2 has three package dependencies: Biostrings, tidyverse, and here. If any 
