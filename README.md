@@ -64,4 +64,4 @@ command line to install them:
     install.packages("here")
 ```
 After all dependencies have been installed, figure 3 can be generated simply by running
-the rscript "create_figure_3.r".
+the file "Figure_3_presentable.R".
