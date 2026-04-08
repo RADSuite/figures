@@ -1,24 +1,38 @@
 library(data.table)
 library(tidyverse)
 library(ggtext)
+library(here)
 
 # load in data
 get_fig_counts <- function() {
-  ncbi_counts  <- read_csv("figures/figure-3/data/ncbi_counts_with_names.csv")
-  rad_counts   <- read_csv("figures/figure-3/data/rad_counts_with_names.csv")
-  silva_counts <- read_csv("figures/figure-3/data/silva_counts_with_names.csv")
+  ncbi_file <- here("figure-3", "data", "ncbi_counts_with_names.csv")
+  rad_file <- here("figure-3", "data", "rad_counts_with_names.csv")
+  silva_file <- here("figure-3", "data", "silva_counts_with_names.csv")
+
+  ncbi_counts <- read_csv(ncbi_file)
+  rad_counts <- read_csv(rad_file)
+  silva_counts <- read_csv(silva_file)
 
 
-  ncbi_species  <- ncbi_counts  %>% filter(Freq > 0) %>% pull(organism_short) %>% unique()
-  rad_species   <- rad_counts   %>% filter(Freq > 0) %>% pull(organism_short) %>% unique()
-  silva_species <- silva_counts %>% filter(Freq > 0) %>% pull(organism_short) %>% unique()
+  ncbi_species <- ncbi_counts %>%
+    filter(Freq > 0) %>%
+    pull(organism_short) %>%
+    unique()
+  rad_species <- rad_counts %>%
+    filter(Freq > 0) %>%
+    pull(organism_short) %>%
+    unique()
+  silva_species <- silva_counts %>%
+    filter(Freq > 0) %>%
+    pull(organism_short) %>%
+    unique()
 
   common_species <- Reduce(intersect, list(ncbi_species, rad_species, silva_species))
   common_species <- common_species[common_species != "Bacteroides caecimuris"]
 
   combined <- bind_rows(
-    ncbi_counts  %>% mutate(database = "NCBI - MetaScope"),
-    rad_counts   %>% mutate(database = "RADlib - MetaScope"),
+    ncbi_counts %>% mutate(database = "NCBI - MetaScope"),
+    rad_counts %>% mutate(database = "RADlib - MetaScope"),
     silva_counts %>% mutate(database = "SILVA - MetaScope")
   ) %>%
     filter(organism_short %in% common_species, Freq > 0) %>%
@@ -50,8 +64,10 @@ generate_figure <- function() {
     add_labels()
 
   ggplot(combined, aes(x = Freq, y = label, fill = database)) +
-    geom_col(position = position_dodge(0.9), alpha = 0.9,
-             color = "black", linewidth = 0.3) +
+    geom_col(
+      position = position_dodge(0.9), alpha = 0.9,
+      color = "black", linewidth = 0.3
+    ) +
     scale_fill_manual(
       values = c(
         "NCBI - BLAST"       = "#E8871A",
@@ -82,4 +98,4 @@ generate_figure <- function() {
     )
 }
 
-generate_figure()
+print(generate_figure())
