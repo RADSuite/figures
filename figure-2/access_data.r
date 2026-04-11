@@ -1,6 +1,8 @@
 library(Biostrings)
 library(here)
 
+i_am("figure-2/access_data.r")
+
 get_ncbi_curated_data <- function(taxa) {
     # load file and get header information
     ncbi_file <- here("figure-2", "data", "bacteria.16SrRNA.fna.gz")
